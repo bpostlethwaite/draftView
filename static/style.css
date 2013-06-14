@@ -1,0 +1,72 @@
+body, html {
+  height:100%;
+  margin: 0 0 0 0;
+}
+
+#frame {
+    height: 100%;
+    width: 100%;
+    background: #eee;
+}
+
+#header {
+    height: 8%;
+    width: 100%;
+    top: 10px;
+}
+
+.container {
+    float:left;
+    margin: 0 0 0 0;
+    height: 90%;
+    width: 48%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+#text-container {
+    height: 100%;
+    width: 100%;
+    border-width: 0;
+}
+
+#html-container {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    background: #fff;
+}
+
+
+img {
+    height: 280px;
+}
+
+.math-display {
+    height: auto;
+}
+
+.frac {
+    height: auto;
+}
+
+.button {
+    width: 120px;
+    height: 40px;
+    border-width: 1px;
+    border-radius: 2px;
+    border-color: #ccc;
+    background: #fff;
+    text-align: center;
+    padding: 8px 0 0 0;
+}
+
+.compile {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button:hover {
+    background: #ddd
+}
