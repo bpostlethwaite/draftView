@@ -98,8 +98,8 @@ function socketHandler (stream) {
 // expose the engine instance at this url
 engine.attach(server, "/draft")
 
-server.listen(9002, function() {
-    console.log("Listening on port 9002")
+server.listen(9001, function() {
+    console.log("Listening on port 9001")
 })
 
 
