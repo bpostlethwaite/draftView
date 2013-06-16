@@ -11,7 +11,7 @@ var htmlContainer = document.querySelector('#html-container')
 mx.on('connection', function (stream) {
 
   if (stream.meta === "html") {
-//    var div = document.createElement('div')
+
     htmlContainer.innerHTML = ''
     stream.on('data', function (data) {
 
@@ -38,6 +38,7 @@ compile.addEventListener('click', function () {
   cs.end()
 })
 
-
+var cs = mx.createWriteStream("data")
+cs.end()
 
 estream.pipe(mx).pipe(estream)
