@@ -33,8 +33,8 @@ var engine = EngineServer(socketHandler)
 
 engine.attach(server, "/draft")
 
-server.listen(9001, function() {
-    console.log("Listening on port 9001")
+server.listen(9002, function() {
+    console.log("Listening on port 9002")
 })
 
 function handler (req, res) {
@@ -60,6 +60,8 @@ function socketHandler (stream) {
   })
 
   mx.on('connection', function (conn) {
+
+    console.log(conn.meta)
 
     if (conn.meta === "compile") {
 
