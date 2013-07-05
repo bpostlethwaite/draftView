@@ -7,10 +7,13 @@ var http = require("http")
   , levelup = require('levelup')
   , db = levelup('authdb')
   , draftfile = "draftBP.tex"
+<<<<<<< HEAD
   , textfile = 'static/' + draftfile
   , htmlfile = 'static/draftBP.html'
   , fsops = {encoding: 'utf8'}
 
+=======
+>>>>>>> origin/master
 
 var staticOptions = {
   path: './static/'
@@ -31,22 +34,27 @@ var mountMain = st(staticOptions)
 staticOptions.index = 'auth.html'
 var mountAuth = st(staticOptions)
 
-var textfile = 'static/draftBP.tex'
+<<<<<<< HEAD
+var server = http.createServer( validate )
+=======
+var textfile = 'static/' + draftfile
 var htmlfile = 'static/draftBP.html'
 
 var fsops = {encoding: 'utf8'}
 
 
-var server = http.createServer( validate )
+var server = http.createServer(handler)
+>>>>>>> origin/master
 
 var engine = EngineServer(socketHandler)
 
 engine.attach(server, "/draft")
 
-server.listen(9001, function() {
-    console.log("Listening on port 9001")
+server.listen(9002, function() {
+    console.log("Listening on port 9002")
 })
 
+<<<<<<< HEAD
 function validate (req, res) {
   console.log('validate')
   var remoteIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
@@ -55,10 +63,20 @@ function validate (req, res) {
     if (authd) return mountMain(req, res)
     else return mountAuth(req,res)
   })
+=======
+function handler (req, res) {
+    var remoteIP = req.headers["x-forwarded-for"]
+    console.log("authenticating", remoteIP)
+    authenticate(remoteIP, function (authd) {
+	if (authd) return mountMain(req, res)
+	else return mountAuth(req,res)
+    })
+>>>>>>> origin/master
 }
 
 
 function socketHandler (stream) {
+<<<<<<< HEAD
 
   var mx = MuxDemux()
 
@@ -91,14 +109,8 @@ function socketHandler (stream) {
     }
 
     if (conn.meta === "restore") {
-      var writer = fs.createWriteStream(textfile)
       fs.createReadStream("static/draftBP.bac")
-      .pipe(writer)
-
-      writer.on('close', function () {
-        compileStream(mx)
-      })
-
+      .pipe(fs.createWriteStream(textfile))
     }
 
     if (conn.meta === "auth") {
@@ -123,10 +135,69 @@ function socketHandler (stream) {
   })
 
   stream.pipe(mx).pipe(stream)
+=======
+    
+    var mx = MuxDemux()
+
+    mx.on('error', function () {
+	stream.destroy()
+    })
+    
+    stream.on('error', function () {
+	mx.destroy()
+    })
+    
+    mx.on('connection', function (conn) {
+	
+	if (conn.meta === "compile") {
+	
+	    //Save input field to file
+	    var fstream = fs.createWriteStream(textfile, fsops)
+	    conn.pipe(fstream)
+	    
+	    fstream.on('close', function () {
+		compileStream(mx)
+	    })
+	}
+	
+	if (conn.meta === "data") {
+	    fs.createReadStream(textfile, fsops)
+		.pipe(mx.createWriteStream('text'))
+	    
+	    fs.createReadStream(htmlfile, fsops)
+		.pipe(mx.createWriteStream('html'))
+	}
+	
+	if (conn.meta === "restore") {
+	    fs.createReadStream("static/draftBP.bac")
+		.pipe(fs.createWriteStream(textfile))
+	}
+	
+	if (conn.meta === "auth") {
+	    
+	    var pxx = ''
+	    conn.on('data', function (data) {
+		pxx += data
+	    })
+	    
+	    conn.on('end', function ()  {
+		if (pxx === "conrad") {
+		    console.log("adding", stream.remoteAddress)
+		    db.put(stream.remoteAddress, true, function (err) {
+			if (err) return console.log('Ooops!', err) // some kind of I/O error
+			else return true
+		    })
+		}
+	    })
+	}
+    })
+    
+    stream.pipe(mx).pipe(stream)
+>>>>>>> origin/master
 }
 
-
 function compileStream (mx) {
+<<<<<<< HEAD
 
   var child = exec('htlatex ' + draftfile, {"cwd": "static"}, html2latex)
 
@@ -154,13 +225,42 @@ function compileStream (mx) {
 		    .pipe(fs.createWriteStream("static/draftBP.bac"))
 	}
       })
+=======
+    
+    var child = exec('htlatex ' + draftfile, {"cwd": "static"}, html2latex)
+    
+    function html2latex (error, stdout, stderr) {
+      
+	
+	if (error) return console.log(error)
+	
+	fs.stat(textfile, function (err, stat) {
+	    if (err) return console.log(err)
+	    
+	    console.log(stat.size > 20000)
+
+	    if (stat.size > 20000) {
+		
+		console.log("uploading")
+
+		fs.createReadStream(textfile, fsops)
+		    .pipe(mx.createWriteStream('text'))
+		
+		fs.createReadStream(htmlfile, fsops)
+		    .pipe(mx.createWriteStream('html'))
+		
+		fs.createReadStream(textfile)
+		    .pipe(fs.createWriteStream("static/draftBP.bac"))
+	    }
+	})
+>>>>>>> origin/master
     }
 }
 
 
 function authenticate (addr, cb) {
-  db.get(addr, function (err, value) {
-    if (err && !value) return cb(false)
-    else return cb(true)
-  })
+    db.get(addr, function (err, value) {
+	if (err && !value) return cb(false)
+	else return cb(true)
+    })
 }

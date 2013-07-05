@@ -31,10 +31,16 @@ mx.on('connection', function (stream) {
 
 
 var compile = document.querySelector('.compile')
+var restore = document.querySelector('.restore')
 
 compile.addEventListener('click', function () {
   var cs = mx.createWriteStream("compile")
   cs.write(textContainer.value)
+  cs.end()
+})
+
+restore.addEventListener('click', function () {
+  var cs = mx.createWriteStream("restore")
   cs.end()
 })
 
