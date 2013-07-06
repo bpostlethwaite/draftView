@@ -10,9 +10,9 @@ body, html {
 }
 
 #header {
-    height: 8%;
     width: 100%;
     top: 10px;
+    text-align: center;
 }
 
 .container {
@@ -51,9 +51,8 @@ img {
     height: auto;
 }
 
-.button {
+button {
     width: 120px;
-    height: 40px;
     border-width: 1px;
     border-radius: 2px;
     border-color: #ccc;
@@ -67,6 +66,6 @@ img {
     margin-right: auto;
 }
 
-.button:hover {
+button:hover {
     background: #ddd
 }
